@@ -1,0 +1,71 @@
+import random
+
+game_running = True
+game_results = []
+
+
+def monster_roll():
+    return random.randint(1, 20)
+
+
+def player_roll():
+    return random.randint(1, 20)
+
+
+def unarmed():
+    return random.randint(1, 4)
+
+
+def s_swd():
+    return random.randint(1, 7)
+
+
+def l_swd():
+    return random.randint(1, 8)
+
+
+while game_running == True:
+
+    counter = 0
+    new_round = True
+
+    armr = {"leather": 1,
+            "scale": 2,
+            "half plate": 3,
+            "full plate": 4}
+    shld = {"wooden": 1,
+            "metal": 2}
+    wpn = {"fists": unarmed,
+           "short sword": s_swd,
+           "long sword": l_swd}
+    plyr = {"Name": (),
+            "AC_base": 10,
+            "Attack": player_roll,
+            "Weapon": ()}
+    player_hp = 50
+
+    mnstr = {"Name": "Korg",
+             "AC": 19,
+             "Attack": monster_roll}
+    monster_hp = 100
+
+    print("What is your name?")
+    print("____" * 5)
+    plyr["Name"] = input()
+    print("Hello " + plyr["Name"])
+    print("____" * 5)
+
+    print("Choose your weapon!!")
+    print("1: Unarmed")
+    print("2: Short Sword")
+    print("3: Long Sword")
+
+    plyr["Weapon"] = input()
+
+    if plyr["Weapon"] == 1
+    print("You have chosen your mighty fists!!")
+      elif plyr["Weapon"] == 2
+       print("You have chosen a grand Short Sword!!")
+           elif plyr["Weapon"]:
+                == 3
+            print("You have chosen the frightening Long Sword!")
