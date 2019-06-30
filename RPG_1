@@ -27,7 +27,6 @@ def l_swd():
 while game_running == True:
 
     counter = 0
-    new_round = True
 
     armr = {"leather": 1,
             "scale": 2,
@@ -38,34 +37,139 @@ while game_running == True:
     wpn = {"fists": unarmed,
            "short sword": s_swd,
            "long sword": l_swd}
-    plyr = {"Name": (),
+    plyr = {"name": (),
             "AC_base": 10,
-            "Attack": player_roll,
-            "Weapon": ()}
-    player_hp = 50
+            "armor": "?",
+            "shield": "?",
+            "attack": player_roll,
+            "weapon": (),
+            "HP": 50}
 
-    mnstr = {"Name": "Korg",
+    mnstr = {"name": "Korg",
              "AC": 19,
-             "Attack": monster_roll}
-    monster_hp = 100
+             "attack_min": monster_roll,
+             "HP": 100}
 
     print("What is your name?")
     print("____" * 5)
     plyr["Name"] = input()
+    print("____" * 5)
     print("Hello " + plyr["Name"])
+    print("[enter]")
+    input()
     print("____" * 5)
 
     print("Choose your weapon!!")
     print("1: Unarmed")
     print("2: Short Sword")
     print("3: Long Sword")
+    print("____" * 5)
 
     plyr["Weapon"] = input()
+    print("____" * 5)
 
-    if plyr["Weapon"] == 1
-    print("You have chosen your mighty fists!!")
-      elif plyr["Weapon"] == 2
-       print("You have chosen a grand Short Sword!!")
-           elif plyr["Weapon"]:
-                == 3
-            print("You have chosen the frightening Long Sword!")
+    if plyr["Weapon"] == "1":
+        print("You have chosen your mighty fists!!")
+        print("[enter]")
+        input()
+
+    elif plyr["Weapon"] == "2":
+        print("You have chosen a fine Short Sword!!")
+        print("[enter]")
+        input()
+
+    elif plyr["Weapon"] == "3":
+        print("You have chosen the frightening Long Sword!")
+        print("[enter]")
+        input()
+
+    else:
+        print("Your indecision has left you unarmed")
+        print("[enter]")
+        input()
+
+    print("____" * 5)
+    print("Choose Your Armor")
+    print("1: Leather Armor")
+    print("2: Scale Male")
+    print("3: Half Plate")
+    print("4: Full Plate")
+
+    print("____" * 5)
+    plyr["armor"] = input()
+    print("____" * 5)
+
+    if plyr["armor"] == "1":
+        print("Light and flexible you are.")
+        print("[enter]")
+        input()
+
+    elif plyr["armor"] == "2":
+        print("More than suitable.")
+        print("[enter]")
+        input()
+
+    elif plyr["armor"] == "3":
+        print("You are well armored.")
+        print("[enter]")
+        input()
+
+    elif plyr["armor"] == "4":
+        print("Strong you must be to wear such armor.")
+        print("[enter]")
+        input()
+
+    else:
+        print("You have found armor useless and are now without it!")
+        print("[enter]")
+        input()
+
+    print("____" * 5)
+    print("Now, your final piece of equipment: a shield")
+    print("1: Wooden")
+    print("2: Metal")
+    print("3: No Shield")
+
+    print("____" * 5)
+    plyr["shield"] = input()
+    print("____" * 5)
+
+    if plyr["shield"] == "1":
+        print("You now have a sturdy wooden shield.")
+        print("[enter]")
+        input()
+
+    elif plyr["shield"] == "2":
+        print("That metal shield shall protect you well.")
+        print("[enter]")
+        input()
+
+    elif plyr["shield"] == "3":
+        print("This is brave, or folly.")
+        print("[enter]")
+        input()
+
+    else:
+        print("No choice, no shield!")
+        print("[enter]")
+        input()
+
+    print("----" * 5)
+    print("We are complete, and you ready!")
+    print("Shall we fight a fowl beast, and rid this land of a great foe?")
+    print("1: Yes")
+    print("2: No")
+
+    print("----" * 5)
+    new_round = input()
+    print("----" * 5)
+
+    if new_round == "1":
+        print("Then, be prepared, and be warned, the path forward is difficult but yields great rewards!")
+        print("[enter]")
+        input()
+
+    elif new_round == "2":
+        print("Then, Be Gone!!")
+
+    game_running = False
