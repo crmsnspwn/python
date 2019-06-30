@@ -26,7 +26,7 @@ def l_swd():
 
 while game_running == True:
 
-    counter = 0
+    new_round = True
 
     armr = {"leather": 1,
             "scale": 2,
@@ -39,10 +39,10 @@ while game_running == True:
            "long sword": l_swd}
     plyr = {"name": (),
             "AC_base": 10,
-            "armor": "?",
-            "shield": "?",
-            "attack": player_roll,
+            "armor": (),
+            "shield": (),
             "weapon": (),
+            "attack": player_roll,
             "HP": 50}
 
     mnstr = {"name": "Korg",
@@ -69,21 +69,25 @@ while game_running == True:
     print("____" * 5)
 
     if plyr["Weapon"] == "1":
+        plyr["weapon"] = wpn["fists"]
         print("You have chosen your mighty fists!!")
         print("[enter]")
         input()
 
     elif plyr["Weapon"] == "2":
+        plyr["weapon"] = wpn["long sword"]
         print("You have chosen a fine Short Sword!!")
         print("[enter]")
         input()
 
     elif plyr["Weapon"] == "3":
+        plyr["weapon"] = wpn["long sword"]
         print("You have chosen the frightening Long Sword!")
         print("[enter]")
         input()
 
     else:
+        plyr["weapon"] = wpn["fists"]
         print("Your indecision has left you unarmed")
         print("[enter]")
         input()
@@ -100,26 +104,31 @@ while game_running == True:
     print("____" * 5)
 
     if plyr["armor"] == "1":
+        plyr["armor"] = armr["leather"]
         print("Light and flexible you are.")
         print("[enter]")
         input()
 
     elif plyr["armor"] == "2":
+        plyr["armor"] = armr["scale"]
         print("More than suitable.")
         print("[enter]")
         input()
 
     elif plyr["armor"] == "3":
+        plyr["armor"] = armr["half plate"]
         print("You are well armored.")
         print("[enter]")
         input()
 
     elif plyr["armor"] == "4":
+        plyr["armor"] = armr["full plate"]
         print("Strong you must be to wear such armor.")
         print("[enter]")
         input()
 
     else:
+        plyr["armor"] = 0
         print("You have found armor useless and are now without it!")
         print("[enter]")
         input()
@@ -135,41 +144,96 @@ while game_running == True:
     print("____" * 5)
 
     if plyr["shield"] == "1":
+        plyr["shield"] = shld["wooden"]
         print("You now have a sturdy wooden shield.")
         print("[enter]")
         input()
 
     elif plyr["shield"] == "2":
+        plyr["shield"] = shld["metal"]
         print("That metal shield shall protect you well.")
         print("[enter]")
         input()
 
     elif plyr["shield"] == "3":
-        print("This is brave, or folly.")
+        plyr["shield"] = 0
+        print("This is bravery, or folly.")
         print("[enter]")
         input()
 
     else:
+        plyr["shield"] = 0
         print("No choice, no shield!")
         print("[enter]")
         input()
 
     print("----" * 5)
-    print("We are complete, and you ready!")
+    print("We are complete, and you are ready!")
     print("Shall we fight a fowl beast, and rid this land of a great foe?")
     print("1: Yes")
     print("2: No")
 
     print("----" * 5)
-    new_round = input()
+    venture_on = input()
     print("----" * 5)
 
-    if new_round == "1":
+    if venture_on == "1":
         print("Then, be prepared, and be warned, the path forward is difficult but yields great rewards!")
         print("[enter]")
         input()
 
-    elif new_round == "2":
-        print("Then, Be Gone!!")
+        print("You enter a midnight black dungeon.")
+        print("Lighting you torch, you see foot prints leading through an archway")
+        print("           ________________")
+        print("          |                |")
+        print("          |                |")
+        print("          |                |")
+        print("          |                |")
+        print("          |                |")
+        print("          |   /\/\         |")
+        print("              \  /  /\/\    ")
+        print("               []   \  /    ")
+        print("                     []     ")
+        print("____" * 10)
+        print("Do you follow?")
+        print("1: Follow")
+        print("2: Leave")
+        follow = input()
+        print("____" * 5)
 
+        while new_round == True:
+            player_won = False
+            monster_won = False
+
+            if follow == "1":
+                print("You follow the foot prints and are met by a hideous beast.")
+                print("IT SEES YOU!")
+                print("Do you Fight or Flee")
+                print("1: FIGHT!")
+                print("2: FLEE!")
+                fight = input()
+                print("____" * 5)
+                print("[enter]")
+                input()
+
+                if fight == "1":
+                    print("1: Attack!")
+                    print("2: Run Away")
+                    action = input()
+                    print("____" * 10)
+                    print("[enter]")
+                    input()
+
+                    if action == "1":
+                        print("You attack the monster...")
+                        player_roll()
+                        if plyr["attack"] >= mnstr["AC"]:
+                            mnstr["HP"] = mnstr["HP"] - \
+                                plyr["attack"] + plyr["weapon"]
+                            if mnstr["HP"] <= 0:
+                                player_won = True
+                    print(mnstr["HP"])
+
+    elif venture_on == "2":
+        print("Then, Be Gone!!")
     game_running = False
