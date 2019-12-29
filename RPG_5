@@ -279,7 +279,7 @@ No One Hears From You Again...
                                 game_running = True
                             elif fight_on == "2":
                                 print("""You have faught valiantly...
-        Maybe you will return another day.""")
+Maybe you will return another day.""")
                                 round_result = {
                                     "name": plyr["name"], "health": plyr["hp"], "rounds": counter}
                                 game_results.append(round_result)
