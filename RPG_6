@@ -1,0 +1,653 @@
+from random import randint
+
+game_running = True
+game_results = []
+plyr_wpn = ()
+
+armr = {"leather": 1,
+        "scale": 2,
+        "half plate": 3,
+        "full plate": 4}
+
+shld = {"wooden": 1,
+        "metal": 2}
+
+wpn = {"fists": (),
+       "short sword": (),
+       "long sword": ()}
+
+plyr = {"ac": (),
+        "ac_base": 10,
+        "atk_bns": 7,
+        "heal": (),
+        "hp": 50,
+        "name": (),
+        "roll": (),
+        "str": 4,
+        "wpn": ()}
+
+mnstr = ()
+
+mnstr_1 = {"ac": 12,
+           "atk_bns": 2,
+           "hp": 25,
+           "name": "Rats",
+           "roll": (),
+           "str": 1,
+           "wpn_dmg": ()}
+
+mnstr_2 = {"ac": 15,
+           "atk_bns": 4,
+           "hp": 50,
+           "name": "Basalisk",
+           "roll": (),
+           "str": 3,
+           "wpn_dmg": ()}
+
+mnstr_3 = {"ac": 16,
+           "atk_bns": 5,
+           "hp": 75,
+           "name": "Mutant",
+           "roll": (),
+           "str": 4,
+           "wpn_dmg": ()}
+
+mnstr_4 = {"ac": 17,
+           "atk_bns": 6,
+           "hp": 100,
+           "name": "Hydra",
+           "roll": (),
+           "str": 5,
+           "wpn_dmg": ()}
+
+no_mnstr = ()
+
+room_1 = {"dscrptn": "a vast, open space with boxes in one corner and only one other door",
+          "bxs": (),
+          "dr": (),
+          "mnstrs": ()}
+
+room_2 = {"dscrptn": """a cramped corridor with three other doors: one to the left,
+one directly ahead, and one to the right""",
+          "dr_1": (),
+          "dr_2": (),
+          "dr_3": ()}
+
+room_3 = {"dscrptn": "a room with two doors; one to the left and to the right. A foul smell fills the air",
+          "dr_1": (),
+          "dr_2": (),
+          "mnstrs": ()}
+
+
+def game_ends(winner_name):
+    if winner_name == plyr["name"]:
+        print(f'{winner_name}, you are victorious!')
+    elif winner_name == mnstr["name"]:
+        print(f'The {winner_name} has defeated you')
+
+
+def plyr_heal():
+    plyr["heal"] = randint(1, 5) + randint(1, 5) + randint(1, 5) + 4
+    plyr["hp"] = plyr["hp"] + plyr["heal"]
+    print(f'You heal for {plyr["heal"]} points')
+
+
+def plyr_fist_atk():
+    plyr["wpn"] = randint(1, 5)
+    plyr["roll"] = randint(1, 21)
+    if (plyr["roll"] + plyr["atk_bns"]) >= mnstr["ac"]:
+        mnstr["hp"] = mnstr["hp"] - (plyr["str"] + plyr["wpn"])
+        print(f'You Swing you fists and hit for {plyr["str"] + plyr["wpn"]}')
+    elif (plyr["roll"] + plyr["atk_bns"]) < mnstr["ac"]:
+        print(f'You swing at the {mnstr["name"]} and miss!')
+
+
+def plyr_ssword_atk():
+    plyr["wpn"] = randint(1, 9)
+    plyr["roll"] = randint(1, 21)
+    if (plyr["roll"] + plyr["atk_bns"]) >= mnstr["ac"]:
+        mnstr["hp"] = mnstr["hp"] - (plyr["str"] + plyr["wpn"])
+        print(
+            f'You Swing your short sword and hit for {plyr["str"] + plyr["wpn"]}')
+    elif (plyr["roll"] + plyr["atk_bns"]) < mnstr["ac"]:
+        print(f'You swing at the {mnstr["name"]} and miss!')
+
+
+def plyr_lsword_atk():
+    plyr["wpn"] = randint(1, 11)
+    plyr["roll"] = randint(1, 21)
+    if (plyr["roll"] + plyr["atk_bns"]) >= mnstr["ac"]:
+        mnstr["hp"] = mnstr["hp"] - (plyr["str"] + plyr["wpn"])
+        print(
+            f'You Swing your long sword and hit for {plyr["str"] + plyr["wpn"]}')
+    elif (plyr["roll"] + plyr["atk_bns"]) < mnstr["ac"]:
+        print(f'You swing at the {mnstr["name"]} and miss!')
+
+
+def mnstr_atk():
+    mnstr["roll"] = randint(1, 21)
+    mnstr["wpn_dmg"] = randint(1, 9)
+    if (mnstr["roll"] + mnstr["atk_bns"]) >= plyr["ac_base"]:
+        plyr["hp"] = plyr["hp"] - (mnstr["str"] + mnstr["wpn_dmg"])
+        print(
+            f'The {mnstr["name"]} hits you for {mnstr["str"] + mnstr["wpn_dmg"]} damage!')
+    elif (mnstr["roll"] + mnstr["atk_bns"]) < plyr["ac_base"]:
+        print(f'The {mnstr["name"]} narrowly misses you!')
+
+
+while game_running == True:
+
+    counter = 0
+    move_on = True
+    new_round = True
+
+    print("What is your name, hero?")
+    plyr["name"] = input()
+    print("--" * 10)
+    print(f'Hello {plyr["name"]},')
+
+    print("""What is your choice of armor?:
+        1: Leather Armor
+        2: Scale Mail
+        3: Half Plate
+        4: Full Plate""")
+    armor = input()
+
+    if armor == "1":
+        plyr["ac"] = plyr["ac_base"] + armr["leather"]
+    elif armor == "2":
+        plyr["ac"] = plyr["ac_base"] + armr["scale"]
+    elif armor == "3":
+        plyr["ac"] = plyr["ac_base"] + armr["half plate"]
+    elif armor == "4":
+        plyr["ac"] = plyr["ac_base"] + armr["full plate"]
+    else:
+        plyr["ac"] = plyr["ac_base"]
+        print("You have no armor!")
+    print("--" * 10)
+
+    print("""And a shield?:
+        1: Wood
+        2: Metal""")
+    shield = input()
+    print("--" * 10)
+
+    if shield == "1":
+        plyr["ac"] = plyr["ac"] + shld["wooden"]
+    elif shield == "2":
+        plyr["ac"] = plyr["ac"] + shld["metal"]
+    else:
+        plyr["ac"] = plyr["ac"] + 0
+        print("You have no shield!")
+
+    print("""You shall brandish a weapon... which?
+        1: Your Fists
+        2: Short Sword
+        3: Long Sword""")
+    weapon = input()
+    print("--" * 10)
+
+    if weapon == "1":
+        plyr_wpn = 1
+    elif weapon == "2":
+        plyr_wpn = 2
+    elif weapon == "3":
+        plyr_wpn = 3
+    else:
+        plyr_wpn = 1
+        print("Fists it is!")
+
+    print("""You are now outfitted. Shall we fight a fowl beast, and rid this land of a great foe?
+        1: Yes
+        2: No""")
+
+    print("--" * 10)
+
+    while move_on == True:
+
+        dungeon = True
+        venture_on = input()
+
+        if venture_on == "1":
+            print("""Then, be prepared, and be warned, the path forward is difficult but yields great rewards!
+        [enter]""")
+            go = input()
+            print("--" * 10)
+
+            print("""You enter a midnight black dungeon.
+Lighting your torch, you see foot prints leading through an archway.
+        [enter]""")
+            print("--"*10)
+
+            while dungeon == True:
+
+                new_room = True
+
+                room = randint(1, 4)
+                if room == 1:
+                    rm = room_1
+                elif room == 2:
+                    rm = room_2
+                elif room == 3:
+                    rm = room_3
+
+                print(f'you step in to {rm["dscrptn"]}')
+
+                while new_room == True:
+
+                    encounter = True
+
+                    if rm == room_1:
+                        print("""What do you want to do?
+        1: Search the boxes
+        2: Go through the door""")
+                        chc_1 = input()
+                        print("__"*10)
+                        if chc_1 == "1":
+                            bxs = randint(1, 3)
+                            if bxs == 1:
+                                rats = True
+                                print("You are swarmed by rats!")
+                                while rats == True:
+                                    print("""What shall you do?
+        1: Attack!
+        2: Heal!
+        3: Flee!
+        4: Stats.""")
+                                    action = input()
+                                    print("--" * 10)
+                                    if action == "1":
+                                        if plyr_wpn == 1:
+                                            plyr_fist_atk()
+                                            if mnstr["hp"] <= 0:
+                                                player_won = True
+                                            else:
+                                                mnstr_atk()
+                                                if plyr["hp"] <= 0:
+                                                    monster_won = True
+                                        elif plyr_wpn == 2:
+                                            plyr_ssword_atk()
+                                            if mnstr["hp"] <= 0:
+                                                player_won = True
+                                            else:
+                                                mnstr_atk()
+                                                if plyr["hp"] <= 0:
+                                                    monster_won = True
+                                        elif plyr_wpn == 3:
+                                            plyr_lsword_atk()
+                                            if mnstr["hp"] <= 0:
+                                                player_won = True
+                                            else:
+                                                mnstr_atk()
+                                                if plyr["hp"] <= 0:
+                                                    monster_won = True
+
+                                    elif action == "2":
+                                        plyr_heal()
+                                        if plyr["hp"] >= 50:
+                                            plyr["hp"] = 50
+                                            print("Health at max!")
+                                        mnstr_atk()
+                                        if plyr["hp"] <= 0:
+                                            monster_won = True
+
+                                    elif action == "3":
+                                        print("""You change your mind, turn tail and run...
+            No One Hears From You Again...
+                    COWARD!""")
+                                        new_round = False
+                                        game_running = False
+                                        move_on = False
+                                        encounter = False
+                                        new_room = False
+
+                                    elif action == "4":
+                                        print("Stats:")
+                                        for player_stat in game_results:
+                                            print(player_stat)
+                                            print(counter)
+                                            print("--"*10)
+
+                                    else:
+                                        print("What are you doing?")
+
+                                    if player_won == False and monster_won == False:
+                                        print("--"*10)
+                                        print(
+                                            f'{plyr["name"]} has {str(plyr["hp"])} Hit Points left.')
+                                        print(
+                                            f'{mnstr["name"]} has {str(mnstr["hp"])} Hit Points left.')
+                                        print("--"*10)
+
+                                    elif player_won:
+                                        game_ends(plyr['name'])
+                                        print("""Would you like to fight another beast?
+        1: Yes
+        2: No""")
+                                        fight_on = input()
+                                        if fight_on == "1":
+                                            plyr["hp"] = 50
+                                            mnstr["hp"] = 100
+                                            print("--"*10)
+                                            encounter = False
+                                        elif fight_on == "2":
+                                            print("""You have faught valiantly...
+        Maybe you will return another day.""")
+                                            round_result = {
+                                                "name": plyr["name"], "health": plyr["hp"], "rounds": counter}
+                                            game_results.append(round_result)
+                                            new_round = False
+                                            game_running = False
+                                            move_on = False
+                                            encounter = False
+                                            new_room = False
+                                        else:
+                                            print("""Your indecision has cost you greatly...
+        A Wandering Monster has taken this opportunity and eats you in one fell swoop...
+        Farewell.""")
+                                            new_round = False
+                                            game_running = False
+                                            move_on = False
+                                            encounter = False
+                                            new_room = False
+
+                                    elif monster_won:
+                                        game_ends(mnstr["name"])
+                                        round_result = {
+                                            "name": plyr["name"], "health": plyr["hp"], "rounds": counter}
+                                        game_results.append(round_result)
+                                        new_round = False
+                                        game_running = False
+                                        move_on = False
+                                        encounter = False
+                                        new_room = False
+
+                            elif bxs == 2:
+                                print("You find nothing in the box.")
+
+                        elif chc_1 == 2:
+                            print("You walk through the door in front of you.")
+
+                    elif rm == room_2:
+
+                        print("""Where do you want to go?
+        1: To the left?
+        2: Straight ahead?
+        3: To the Right""")
+                        chc_2 = input()
+                        if chc_2 == "1":
+                            print("You head towards the door on your left.")
+                        elif chc_2 == "2":
+                            print("Forward you walk.")
+                        elif chc_2 == "3":
+                            print("You take the path to the right.")
+
+                    elif rm == room_3:
+
+                        print(f"""You walk through a door to find {rm["dscrptn"]}
+        What is your next move?
+        1: Door to the left.
+        2: Door to the Right.""")
+                        chc_3 = input()
+
+                        if chc_3 == 1:
+
+                            rndm_mnstr = randint(1, 5)
+
+                            if rndm_mnstr == 1:
+                                mnstr = mnstr_1
+                            elif rndm_mnstr == 2:
+                                mnstr = mnstr_2
+                            elif rndm_mnstr == 3:
+                                mnstr = mnstr_3
+                            elif rndm_mnstr == 4:
+                                print("You move to the door on your left.")
+
+                            if mnstr == mnstr_1 or mnstr == mnstr_2 or mnstr == mnstr_3:
+                                print("""What shall you do?
+        1: Attack!
+        2: Heal!
+        3: Flee!
+        4: Stats.""")
+                                action = input()
+                                print("--" * 10)
+                                if action == "1":
+                                    if plyr_wpn == 1:
+                                        plyr_fist_atk()
+                                        if mnstr["hp"] <= 0:
+                                            player_won = True
+                                        else:
+                                            mnstr_atk()
+                                            if plyr["hp"] <= 0:
+                                                monster_won = True
+                                    elif plyr_wpn == 2:
+                                        plyr_ssword_atk()
+                                        if mnstr["hp"] <= 0:
+                                            player_won = True
+                                        else:
+                                            mnstr_atk()
+                                            if plyr["hp"] <= 0:
+                                                monster_won = True
+                                    elif plyr_wpn == 3:
+                                        plyr_lsword_atk()
+                                        if mnstr["hp"] <= 0:
+                                            player_won = True
+                                        else:
+                                            mnstr_atk()
+                                            if plyr["hp"] <= 0:
+                                                monster_won = True
+
+                                elif action == "2":
+                                    plyr_heal()
+                                    if plyr["hp"] >= 50:
+                                        plyr["hp"] = 50
+                                        print("Health at max!")
+                                    mnstr_atk()
+                                    if plyr["hp"] <= 0:
+                                        monster_won = True
+
+                                elif action == "3":
+                                    print("""You change your mind, turn tail and run...
+            No One Hears From You Again...
+                    COWARD!""")
+                                    new_round = False
+                                    game_running = False
+                                    move_on = False
+                                    encounter = False
+
+                                elif action == "4":
+                                    print("Stats:")
+                                    for player_stat in game_results:
+                                        print(player_stat)
+                                        print(counter)
+                                        print("--"*10)
+
+                                else:
+                                    print("What are you doing?")
+
+                                if player_won == False and monster_won == False:
+                                    print("--"*10)
+                                    print(
+                                        f'{plyr["name"]} has {str(plyr["hp"])} Hit Points left.')
+                                    print(
+                                        f'{mnstr["name"]} has {str(mnstr["hp"])} Hit Points left.')
+                                    print("--"*10)
+
+                                elif player_won:
+                                    game_ends(plyr['name'])
+                                    print("""Would you like to fight another beast?
+            1: Yes
+            2: No""")
+                                    fight_on = input()
+                                    if fight_on == "1":
+                                        plyr["hp"] = 50
+                                        mnstr["hp"] = 100
+                                        print("--"*10)
+                                        encounter = False
+                                    elif fight_on == "2":
+                                        print("""You have faught valiantly...
+            Maybe you will return another day.""")
+                                        round_result = {
+                                            "name": plyr["name"], "health": plyr["hp"], "rounds": counter}
+                                        game_results.append(round_result)
+                                        new_round = False
+                                        game_running = False
+                                        move_on = False
+                                        encounter = False
+                                    else:
+                                        print("""Your indecision has cost you greatly...
+            A Wandering Monster has taken this opportunity and eats you in one fell swoop...
+            Farewell.""")
+                                        new_round = False
+                                        game_running = False
+                                        move_on = False
+                                        encounter = False
+
+                                elif monster_won:
+                                    game_ends(mnstr["name"])
+                                    round_result = {
+                                        "name": plyr["name"], "health": plyr["hp"], "rounds": counter}
+                                    game_results.append(round_result)
+                                    new_round = False
+                                    game_running = False
+                                    move_on = False
+                                    encounter = False
+
+                        elif chc_3 == 2:
+
+                            rndm_mnstr = randint(1, 5)
+
+                            if rndm_mnstr == 1:
+                                mnstr = mnstr_1
+                            elif rndm_mnstr == 2:
+                                mnstr = mnstr_2
+                            elif rndm_mnstr == 3:
+                                mnstr = mnstr_3
+                            elif rndm_mnstr == 4:
+                                print("You take the door on your right.")
+                                continue
+
+                            print("""What shall you do?
+        1: Attack!
+        2: Heal!
+        3: Flee!
+        4: Stats.""")
+                            action = input()
+                            print("--" * 10)
+                            if action == "1":
+                                if plyr_wpn == 1:
+                                    plyr_fist_atk()
+                                    if mnstr["hp"] <= 0:
+                                        player_won = True
+                                    else:
+                                        mnstr_atk()
+                                        if plyr["hp"] <= 0:
+                                            monster_won = True
+                                elif plyr_wpn == 2:
+                                    plyr_ssword_atk()
+                                    if mnstr["hp"] <= 0:
+                                        player_won = True
+                                    else:
+                                        mnstr_atk()
+                                        if plyr["hp"] <= 0:
+                                            monster_won = True
+                                elif plyr_wpn == 3:
+                                    plyr_lsword_atk()
+                                    if mnstr["hp"] <= 0:
+                                        player_won = True
+                                    else:
+                                        mnstr_atk()
+                                        if plyr["hp"] <= 0:
+                                            monster_won = True
+
+                            elif action == "2":
+                                plyr_heal()
+                                if plyr["hp"] >= 50:
+                                    plyr["hp"] = 50
+                                    print("Health at max!")
+                                mnstr_atk()
+                                if plyr["hp"] <= 0:
+                                    monster_won = True
+
+                            elif action == "3":
+                                print("""You change your mind, turn tail and run...
+        No One Hears From You Again...
+                COWARD!""")
+                                new_round = False
+                                game_running = False
+                                move_on = False
+                                encounter = False
+
+                            elif action == "4":
+                                print("Stats:")
+                                for player_stat in game_results:
+                                    print(player_stat)
+                                    print(counter)
+                                    print("--"*10)
+
+                            else:
+                                print("What are you doing?")
+
+                            if player_won == False and monster_won == False:
+                                print("--"*10)
+                                print(
+                                    f'{plyr["name"]} has {str(plyr["hp"])} Hit Points left.')
+                                print(
+                                    f'{mnstr["name"]} has {str(mnstr["hp"])} Hit Points left.')
+                                print("--"*10)
+
+                            elif player_won:
+                                game_ends(plyr['name'])
+                                print("""Would you like to fight another beast?
+        1: Yes
+        2: No""")
+                                fight_on = input()
+                                if fight_on == "1":
+                                    plyr["hp"] = 50
+                                    mnstr["hp"] = 100
+                                    print("--"*10)
+                                    encounter = False
+                                elif fight_on == "2":
+                                    print("""You have faught valiantly...
+        Maybe you will return another day.""")
+                                    round_result = {
+                                        "name": plyr["name"], "health": plyr["hp"], "rounds": counter}
+                                    game_results.append(round_result)
+                                    new_round = False
+                                    game_running = False
+                                    move_on = False
+                                    encounter = False
+                                else:
+                                    print("""Your indecision has cost you greatly...
+        A Wandering Monster has taken this opportunity and eats you in one fell swoop...
+        Farewell.""")
+                                    new_round = False
+                                    game_running = False
+                                    move_on = False
+                                    encounter = False
+
+                            elif monster_won:
+                                game_ends(mnstr["name"])
+                                round_result = {
+                                    "name": plyr["name"], "health": plyr["hp"], "rounds": counter}
+                                game_results.append(round_result)
+                                new_round = False
+                                game_running = False
+                                move_on = False
+                                encounter = False
+
+                        else:
+                            print("Thank you for playing")
+                    elif action == "2":
+                        print("Run little Rabit, Run!!")
+                        new_round = False
+                        game_running = False
+                        move_on = False
+                        new_room = False
+
+        elif venture_on == "2":
+            print("""No harm no foul.
+Leave in peace, although no one will praise your name""")
+            new_round = False
+            game_running = False
+            move_on = False
