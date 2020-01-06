@@ -1,0 +1,643 @@
+from random import randint
+
+game_running = True
+game_results = []
+
+armr = {"none": 0,
+        "leather": 1,
+        "scale": 2,
+        "half plate": 3,
+        "full plate": 4}
+
+shld = {"none": 0,
+        "wooden": 1,
+        "metal": 2}
+
+wpn = {"fists": (),
+       "short sword": (),
+       "long sword": ()}
+
+plyr = {"ac": (),
+        "ac_base": 10,
+        "atk_bns": 7,
+        "heal": (),
+        "hp": 50,
+        "name": (),
+        "roll": (),
+        "str": 4,
+        "wpn": ()}
+
+mnstr = ()
+
+mnstr_1 = {"ac": 12,
+           "atk_bns": 2,
+           "hp": 25,
+           "name": "group of rats",
+           "roll": (),
+           "str": 1,
+           "wpn_dmg": ()}
+
+mnstr_2 = {"ac": 15,
+           "atk_bns": 4,
+           "hp": 50,
+           "name": "Basalisk",
+           "roll": (),
+           "str": 3,
+           "wpn_dmg": ()}
+
+mnstr_3 = {"ac": 16,
+           "atk_bns": 5,
+           "hp": 75,
+           "name": "Mutant",
+           "roll": (),
+           "str": 4,
+           "wpn_dmg": ()}
+
+mnstr_4 = {"ac": 17,
+           "atk_bns": 6,
+           "hp": 100,
+           "name": "Hydra",
+           "roll": (),
+           "str": 5,
+           "wpn_dmg": ()}
+
+no_mnstr = ()
+
+room = ()
+
+room_1 = {"dscrptn": "a vast, open space with boxes in one corner and only one other door",
+          "bxs": (),
+          "dr": ()}
+
+room_2 = {"dscrptn": """a cramped corridor with three other doors: one to the left,
+one directly ahead, and one to the right""",
+          "dr_1": (),
+          "dr_2": (),
+          "dr_3": ()}
+
+room_3 = {"dscrptn": "a room with two doors; one to the left and to the right. A foul smell fills the air",
+          "dr_1": (),
+          "dr_2": ()}
+
+corridor = {"dscrptn": "a long corridor, at the end of which is another doorway"}
+
+
+def game_ends(winner_name):
+    if winner_name == plyr["name"]:
+        print(f'{winner_name}, you are victorious!')
+    elif winner_name == mnstr["name"]:
+        print(f'The {winner_name} has defeated you')
+
+
+def plyr_heal():
+    plyr["heal"] = randint(1, 4) + randint(1, 4) + randint(1, 4) + 4
+    plyr["hp"] = plyr["hp"] + plyr["heal"]
+    print(f'You heal for {plyr["heal"]} points')
+
+
+def plyr_fist_atk():
+    wpn["fists"] = randint(1, 4)
+    plyr["roll"] = randint(1, 20)
+    if (plyr["roll"] + plyr["atk_bns"]) >= mnstr["ac"]:
+        mnstr["hp"] = mnstr["hp"] - (plyr["str"] + wpn["fists"])
+        print(f'You Swing you fists and hit for {plyr["str"] + wpn["fists"]}')
+    elif (plyr["roll"] + plyr["atk_bns"]) < mnstr["ac"]:
+        print(f'You swing at the {mnstr["name"]} and miss!')
+
+
+def plyr_ssword_atk():
+    wpn["short sword"] = randint(1, 8)
+    plyr["roll"] = randint(1, 20)
+    if (plyr["roll"] + plyr["atk_bns"]) >= mnstr["ac"]:
+        mnstr["hp"] = mnstr["hp"] - (plyr["str"] + wpn["short sword"])
+        print(
+            f'You Swing your short sword and hit for {plyr["str"] + wpn["short sword"]}')
+    elif (plyr["roll"] + plyr["atk_bns"]) < mnstr["ac"]:
+        print(f'You swing at the {mnstr["name"]} and miss!')
+
+
+def plyr_lsword_atk():
+    wpn["long sword"] = randint(1, 10)
+    plyr["roll"] = randint(1, 20)
+    if (plyr["roll"] + plyr["atk_bns"]) >= mnstr["ac"]:
+        mnstr["hp"] = mnstr["hp"] - (plyr["str"] + wpn["long sword"])
+        print(
+            f'You Swing your long sword and hit for {plyr["str"] + wpn["long sword"]}')
+    elif (plyr["roll"] + plyr["atk_bns"]) < mnstr["ac"]:
+        print(f'You swing at the {mnstr["name"]} and miss!')
+
+
+def mnstr_atk():
+    mnstr["roll"] = randint(1, 20)
+    mnstr["wpn_dmg"] = randint(1, 8)
+    if (mnstr["roll"] + mnstr["atk_bns"]) >= plyr["ac_base"]:
+        plyr["hp"] = plyr["hp"] - (mnstr["str"] + mnstr["wpn_dmg"])
+        print(
+            f'The {mnstr["name"]} hits you for {mnstr["str"] + mnstr["wpn_dmg"]} damage!')
+    elif (mnstr["roll"] + mnstr["atk_bns"]) < plyr["ac_base"]:
+        print(f'The {mnstr["name"]} narrowly misses you!')
+
+# Beginning of game
+
+
+while game_running == True:
+
+    suit_up = True
+
+    print('Hello Hero, what is your name?')
+
+    plyr_name = input()
+    plyr["name"] = plyr_name
+
+    print('__'*20)
+    print(f'''{plyr["name"]}, it is an honor.
+[enter]''')
+
+    enter = input()
+    print('__'*20)
+    while suit_up == True:
+
+        # pick armor
+
+        print(f'''{plyr["name"]}, What armor do you wish to wear?
+1: A true warrior wears no armor!
+2: Leather Armor
+3: Scale Mail
+4: Half Plate
+5: Full Plate''')
+
+        choice1 = input()
+        print('__'*20)
+
+        if choice1 == "1":
+            plyr["ac"] = plyr["ac_base"] + armr["none"]
+            print(f'''You are brave, {plyr["name"]}, to wear no armor.
+Or very foolish...''')
+        elif choice1 == "2":
+            plyr["ac"] = plyr["ac_base"] + armr["leather"]
+            print(
+                f'{plyr["name"]}, you shall be light and nimble in this armor.')
+        elif choice1 == "3":
+            plyr["ac"] = plyr["ac_base"] + armr["scale"]
+            print(
+                f'Scale, like that of a dragon. A good choice {plyr["name"]}.')
+        elif choice1 == "4":
+            plyr["ac"] = plyr["ac_base"] + armr["half plate"]
+            print(f'{plyr["name"]}, you must be expecting a battle!')
+        elif choice1 == "5":
+            plyr["ac"] = plyr["ac_base"] + armr["full plate"]
+            print(f'''Only the mightiest wear this armor.
+{plyr["name"]}, I will hope to see great things from you.''')
+        else:
+            plyr["ac"] = plyr["ac_base"] + armr["none"]
+            print(
+                f'{plyr["name"]}, your lack of decision has left you bare as the day you were born.')
+
+        print('__'*20)
+
+        # pick shield
+
+        print(f'''{plyr["name"]}, what shield would you like by your side?
+1: Shields are for Weaklings!
+2: A Wooden Shield
+3: A Metal Shield''')
+
+        choice2 = input()
+        print('__'*20)
+
+        if choice2 == "1":
+            plyr["ac"] = plyr["ac"] + shld["none"]
+            print('They may be for weaklings, but weaklings with shields live longer!')
+        elif choice2 == "2":
+            plyr["ac"] = plyr["ac"] + shld["wooden"]
+            print('A humble but sturdy shield.')
+        elif choice2 == "3":
+            plyr["ac"] = plyr["ac"] + shld["metal"]
+            print('This shield expects battle.')
+        else:
+            plyr["ac"] = plyr["ac"] + shld["none"]
+            print('No shield it is for the indecisive one.')
+
+        print('__'*20)
+
+        # pick weapon
+
+        print(f'''{plyr["name"]}, this final choice may be the most important: What weapon shall you wield?
+1: HA! I need no silly weapon!
+2: A Short Sword
+3: A Long Sword''')
+
+        choice3 = input()
+        print('__'*20)
+
+        if choice3 == "1":
+            plyr["wpn"] = 1
+            print('Than fisticuffs it is.')
+        elif choice3 == "2":
+            plyr["wpn"] = 2
+            print(f'{plyr["name"]}, you shall have a mighty short sword')
+        elif choice3 == "3":
+            plyr["wpn"] = 3
+            print('A long sword the likes of Excalibur it\'s self')
+        else:
+            plyr["wpn"] = 1
+            print('Since you did not choose, you shall fight unarmed')
+
+        print('[enter]')
+        enter = input()
+        print('__'*20)
+
+# Continue with Adventure?
+
+        print(f'''{plyr["name"]}, you have chosen your gear.
+Are you ready to continue, or would you like to take another look at our gear?
+1: Continue as I am.
+2: Change my gear.''')
+
+        move_on = input()
+        print('__'*20)
+
+        if move_on == "1":
+            print('Than let us begin our mighty quest!')
+            print('__'*20)
+# This is the beginning of the adventure
+
+            adventure = True
+
+            while adventure == True:
+
+                print(f'''You have chosen the path of righteousness, and for this you will forever be remembered.
+I beg of you, please save us from the terrible monsters near our village, else we be overrun!
+Near us is a cave with many foul beast. Will you rid it of these vermin, and save our village?
+1: I shall save your town!
+2: You can handle this yourselves, I will be on my way.''')
+
+                choice4 = input()
+                print('__'*20)
+
+                if choice4 == "1":
+                    print(
+                        f'Your bravery will be sung of throughout the land. Luck to you on your adventure')
+                    print('__'*20)
+                    print('''You come to a cave entrance. On the floor in front of you, you see the foot prints of many beings.
+The path ahead is dark. You light a torch and continue forward.
+After a few twists and turns, you come to an archway.
+This is how your story begins.''')
+
+ # The Beginning of the Dungeon
+
+                    dungeon = True
+                    while dungeon == True:
+
+                        rndm_room = randint(1, 4)
+                        if rndm_room == 1:
+                            room = room_1
+                        elif rndm_room == 2:
+                            room = room_2
+                        elif rndm_room == 3:
+                            room = room_3
+                        elif rndm_room == 4:
+                            room = corridor
+
+                        print('[enter]')
+                        enter = input()
+
+                        print('__'*20)
+                        print(f'You step into {room["dscrptn"]}')
+
+                        if room == room_1:
+
+                            room1 = True
+                            while room1 == True:
+
+                                print('''What do you want to do?
+1: Check the Boxes
+2: Go through the door''')
+                                choice5 = input()
+                                if choice5 == "1":
+                                    bxs = randint(1, 2)
+                                    if bxs == 1:
+                                        mnstr = mnstr_1
+                                        mnstr["hp"] = 25
+                                        rats = True
+                                        print('You are Swarmed by Rats!')
+
+                                        while rats == True:
+                                            player_won = False
+                                            monster_won = False
+
+                                            print('''What will you do?
+1: Attack
+2: Heal
+3: Flee
+4: Check Stats''')
+                                            action1 = input()
+                                            print('__'*20)
+
+# Start of Fight Sequence
+
+                                            if action1 == "1":
+                                                if plyr["wpn"] == 1:
+                                                    plyr_fist_atk()
+                                                    if mnstr["hp"] <= 0:
+                                                        player_won = True
+                                                    else:
+                                                        mnstr_atk()
+                                                        if plyr["hp"] <= 0:
+                                                            monster_won = True
+                                                elif plyr["wpn"] == 2:
+                                                    plyr_ssword_atk()
+                                                    if mnstr["hp"] <= 0:
+                                                        player_won = True
+                                                    else:
+                                                        mnstr_atk()
+                                                        if plyr["hp"] <= 0:
+                                                            monster_won = True
+                                                elif plyr["wpn"] == 3:
+                                                    plyr_lsword_atk()
+                                                    if mnstr["hp"] <= 0:
+                                                        player_won = True
+                                                    else:
+                                                        mnstr_atk()
+                                                        if plyr["hp"] <= 0:
+                                                            monster_won = True
+
+                                            elif action1 == "2":
+                                                plyr_heal()
+                                                if plyr["hp"] >= 50:
+                                                    plyr["hp"] = 50
+                                                    print('Health at max!')
+                                                mnstr_atk()
+                                                if plyr["hp"] <= 0:
+                                                    monster_won = True
+
+                                            elif action1 == "3":
+                                                print('''You change your mind, turn tail and run...
+No One Hears From You Again...
+COWARD!''')
+                                                rats = False
+                                                room1 = False
+                                                dungeon = False
+                                                adventure = False
+                                                suit_up = False
+                                                game_running = False
+
+                                            elif action1 == "4":
+                                                print("Stats:")
+                                                for player_stat in game_results:
+                                                    print(player_stat)
+                                                    print('__'*20)
+
+                                            else:
+                                                print('What are you doing?')
+
+                                            if player_won == False and monster_won == False:
+                                                print('__'*20)
+                                                print(
+                                                    f'{plyr["name"]} has {str(plyr["hp"])} Hit Points left.')
+                                                print(
+                                                    f'{mnstr["name"]} has {str(mnstr["hp"])} Hit Points left.')
+                                                print("--"*10)
+
+                                            elif player_won == True:
+                                                game_ends(plyr['name'])
+                                                print("""Do you wish to continue on?
+1: Yes
+2: No""")
+                                                fight_on = input()
+                                                if fight_on == "1":
+                                                    rats = False
+                                                elif fight_on == "2":
+                                                    print('''You have faught valiantly...
+Maybe you will return another day.''')
+                                                    round_result = {
+                                                        "name": plyr["name"], "health": plyr["hp"]}
+                                                    game_results.append(
+                                                        round_result)
+                                                    rats = False
+                                                    room1 = False
+                                                    room = False
+                                                    dungeon = False
+                                                    adventure = False
+                                                    suit_up = False
+                                                    game_running = False
+
+                                                else:
+                                                    print('''Your indecision has cost you greatly...
+A Wandering Monster has taken this opportunity and eats you in one fell swoop...
+Farewell.''')
+                                                    rats = False
+                                                    room1 = False
+                                                    rooms = False
+                                                    dungeon = False
+                                                    adventure = False
+                                                    suit_up = False
+                                                    game_running = False
+
+                                            elif monster_won == True:
+                                                game_ends(mnstr["name"])
+                                                round_result = {
+                                                    "name": plyr["name"], "health": plyr["hp"]}
+                                                game_results.append(
+                                                    round_result)
+                                                rats = False
+                                                room1 = False
+                                                rooms = False
+                                                dungeon = False
+                                                adventure = False
+                                                suit_up = False
+                                                game_running = False
+
+# End of Fight Sequence
+
+                                    elif bxs == "2":
+                                        print('You find nothing in the boxes')
+                                        rats = False
+
+                                elif choice5 == "2":
+                                    print('You move towards the other door.')
+                                    rats = False
+                                    room1 = False
+
+                        elif room == room_2:
+                            print(f'''Where do you go?
+1: The left door
+2: Straight ahead
+3: The Right Door''')
+                            choice6 = input()
+                            print('__'*20)
+
+                            if choice6 == "1":
+                                print(
+                                    'You head towards the door on your left.')
+                            if choice6 == "2":
+                                print('Straight ahead you walk.')
+                            if choice6 == "3":
+                                print('You take the right door.')
+
+                        elif room == room_3:
+                            print(f'''What now?
+1: The door on the Left
+2: The Right door''')
+
+                            choice7 = input()
+                            print('__'*10)
+
+                            if choice7 == "1" or choice7 == "2":
+                                rndm_mnstr = randint(1, 4)
+                                if rndm_mnstr == 1:
+                                    mnstr = mnstr_1
+                                    mnstr["hp"] = 25
+                                elif rndm_mnstr == 2:
+                                    mnstr = mnstr_2
+                                    mnstr["hp"] = 50
+                                elif rndm_mnstr == 3:
+                                    mnstr = mnstr_3
+                                    mnstr["hp"] = 75
+                                elif rndm_mnstr == 4:
+                                    mnstr = mnstr_4
+                                    mnstr["hp"] = 100
+
+# The Room Encounters begin
+
+                                encounter = True
+                                mnstr["hp"] = mnstr["hp"]
+
+                                while encounter == True:
+
+                                    player_won = False
+                                    monster_won = False
+
+                                    if mnstr == mnstr_1 or mnstr == mnstr_2 or mnstr == mnstr_3 or mnstr == mnstr_4:
+                                        print(f'''A {mnstr["name"]} has appeared and moves to attack you!
+What shall you do?
+1: Attack!
+2: Heal!
+3: Flee!
+4: Check Stats.''')
+
+                                    action2 = input()
+
+# Start of Fight Sequence
+
+                                    if action2 == "1":
+                                        if plyr["wpn"] == 1:
+                                            plyr_fist_atk()
+                                            if mnstr["hp"] <= 0:
+                                                player_won = True
+                                            else:
+                                                mnstr_atk()
+                                                if plyr["hp"] <= 0:
+                                                    monster_won = True
+                                        elif plyr["wpn"] == 2:
+                                            plyr_ssword_atk()
+                                            if mnstr["hp"] <= 0:
+                                                player_won = True
+                                            else:
+                                                mnstr_atk()
+                                                if plyr["hp"] <= 0:
+                                                    monster_won = True
+                                        elif plyr["wpn"] == 3:
+                                            plyr_lsword_atk()
+                                            if mnstr["hp"] <= 0:
+                                                player_won = True
+                                            else:
+                                                mnstr_atk()
+                                                if plyr["hp"] <= 0:
+                                                    monster_won = True
+
+                                    elif action2 == "2":
+                                        plyr_heal()
+                                        if plyr["hp"] >= 50:
+                                            plyr["hp"] = 50
+                                            print('Health at max!')
+                                        mnstr_atk()
+                                        if plyr["hp"] <= 0:
+                                            monster_won = True
+
+                                    elif action2 == "3":
+                                        print('''You change your mind, turn tail and run...
+No One Hears From You Again...
+COWARD!''')
+                                        dungeon = False
+                                        adventure = False
+                                        suit_up = False
+                                        game_running = False
+
+                                    elif action2 == 4:
+                                        print("Stats:")
+                                        for player_stat in game_results:
+                                            print(player_stat)
+                                            print('__'*20)
+
+                                    else:
+                                        print('What are you doing?')
+
+                                    if player_won == False and monster_won == False:
+                                        print('__'*20)
+                                        print(
+                                            f'{plyr["name"]} has {str(plyr["hp"])} Hit Points left.')
+                                        print(
+                                            f'{mnstr["name"]} has {str(mnstr["hp"])} Hit Points left.')
+                                        print("--"*10)
+
+                                    elif player_won == True:
+                                        game_ends(plyr['name'])
+                                        print("""Do you wish to continue on?
+1: Yes
+2: No""")
+                                        fight_on = input()
+                                        if fight_on == "1":
+                                            room = False
+                                            encounter = False
+
+                                        elif fight_on == "2":
+                                            print('''You have faught valiantly...
+Maybe you will return another day.''')
+                                            round_result = {
+                                                "name": plyr["name"], "health": plyr["hp"]}
+                                            game_results.append(
+                                                round_result)
+                                            room = False
+                                            encounter = False
+                                            dungeon = False
+                                            adventure = False
+                                            suit_up = False
+                                            game_running = False
+
+                                        else:
+                                            print('''Your indecision has cost you greatly...
+A Wandering Monster has taken this opportunity and eats you in one fell swoop...
+Farewell.''')
+                                            dungeon = False
+                                            adventure = False
+                                            suit_up = False
+                                            game_running = False
+
+                                    elif monster_won == True:
+                                        game_ends(mnstr["name"])
+                                        round_result = {
+                                            "name": plyr["name"], "health": plyr["hp"]}
+                                        game_results.append(
+                                            round_result)
+                                        encounter = False
+                                        dungeon = False
+                                        adventure = False
+                                        suit_up = False
+                                        game_running = False
+
+                        else:
+                            new_room = False
+
+# End of Fight Sequence
+
+                elif choice4 == "2":
+                    print(
+                        f'You are no hero {plyr["name"]}, but a coward! Be gone from here, and never return!')
+
+                    adventure = False
+                    suit_up = False
+                    game_running = False
+
+        elif move_on == "2":
+            print('Well than, take another look.')
